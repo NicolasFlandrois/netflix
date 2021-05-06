@@ -2,7 +2,8 @@ import json
 import requests
 from bs4 import BeautifulSoup
 
-from netflix.exceptions import NetflixItemTypeError
+# from netflix.exceptions import NetflixItemTypeError
+from exceptions import NetflixItemTypeError
 
 
 class Movie:
@@ -30,8 +31,26 @@ class Movie:
     def fetch(self):
         url = "https://www.netflix.com/watch/{netflix_id}".format(netflix_id=self.netflix_id)
         response = requests.get(url)
+        # print(response.content)
+        # print(type(response.content))
+        # print(dir(response.content), '\n\n')
+        # How to get from her to parsint data?
+
         soup = BeautifulSoup(response.content, "html.parser")
+        print(soup.text, '\n')
+        # print(type(soup.text), '\n')
+        # print(dir(soup), '\n\n')
+        # soup = soup.text
+        ## data = soup.select("[type='application/ld+json']")[1]
+        ## oJson = json.loads(data.text)["itemListElement"]
+        ## numProducts = len(oJson)
+        ## results = []
+        ## print(results)
+
         metadata_script_tag = soup.find("script", type="application/ld+json")
+        # print(metadata_script_tag)
+        # print(type(metadata_script_tag))
+        # print(dir(metadata_script_tag), '\n\n')
         metadata = json.loads(metadata_script_tag.string)
 
         # Be sure about content
